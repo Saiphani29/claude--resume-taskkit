@@ -1,6 +1,6 @@
 ---
 name: excel-data-analyzer
-description: Analyze CSV or spreadsheet data, explain patterns, clean data carefully, and create reproducible summaries or reports.
+description: Analyze CSV or spreadsheet data, explain patterns, clean data carefully, and create reproducible summaries, numeric statistics, and temporal profiles.
 ---
 
 # Excel & Data Analyzer
@@ -9,19 +9,19 @@ description: Analyze CSV or spreadsheet data, explain patterns, clean data caref
 1. Inspect the file structure, column names, row count, missing values, and likely data types before drawing conclusions.
 2. Ask what decision or question the analysis should answer if it is not clear.
 3. Validate assumptions, duplicates, missing values, and inconsistent formats.
-4. Use Python for repeatable calculations and large or structured datasets when available.
+4. Use Python for repeatable calculations, statistical summaries, and large or structured datasets.
 5. Separate observed facts from interpretations. Do not claim correlation proves causation.
 6. Explain any exclusions, transformations, and limitations.
 7. Save derived outputs to a new file; never silently overwrite the source.
 
 ## Python utility
-For a CSV file, the bundled `scripts/csv_profile.py` can create a JSON profile using Python's standard library:
+For CSV, TSV, or delimiter-separated files, the bundled `scripts/csv_profile.py` generates an analytical profile (auto-detecting delimiters `, ; \t |`, calculating numeric min/max/mean/median/sum, date spans, and duplicate row estimates) using Python's standard library:
 
 ```bash
-python .claude/skills/excel-data-analyzer/scripts/csv_profile.py data.csv --output profile.json
+python skills/excel-data-analyzer/scripts/csv_profile.py path/to/data.csv --output profile.json
 ```
 
-Adjust the path if you are running from the repository root.
+Adjust the path if running from `.claude/skills/`.
 
 ## Rules
 - Do not expose personal or confidential data unnecessarily.

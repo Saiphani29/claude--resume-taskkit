@@ -1,12 +1,12 @@
 # Claude TaskKit
 
-A small, open-source starter library of reusable Claude Code skills with optional Python utilities.
+A lightweight, open-source library of reusable Claude Code skills with deterministic Python automation utilities.
 
 ## What's included
 
-- `jd-resume-review`: evidence-based resume review against a job description. It supports human review and is not an automated hiring decision system.
-- `document-improver`: reusable workflow for improving provided text while preserving meaning.
-- `excel-data-analyzer`: workflow for spreadsheet analysis plus a Python CSV summary utility.
+- `jd-resume-review`: evidence-based resume review against a job description. Includes `resume_matcher.py` for automated requirement parsing, quote extraction, and prompt-injection screening.
+- `document-improver`: reusable workflow for improving provided text while preserving meaning and technical accuracy.
+- `excel-data-analyzer`: workflow for spreadsheet analysis plus `csv_profile.py` for automatic delimiter sniffing, numeric statistics, date spans, and duplicate checks.
 
 ## Quick start
 
@@ -14,7 +14,7 @@ A small, open-source starter library of reusable Claude Code skills with optiona
 2. Copy the skill folders you want into your project's `.claude/skills/` directory, or copy the whole `skills/` directory there.
 3. Start Claude Code in that project.
 4. Ask for a task matching a skill, or invoke it by name, e.g. `/excel-data-analyzer`.
-5. For Python utilities, use Python 3.10+ and follow each skill's instructions.
+5. For Python utilities, use Python 3.10+ (standard library only; no external dependencies required).
 
 Example layout after copying:
 
@@ -27,15 +27,25 @@ your-project/
         └── excel-data-analyzer/
 ```
 
-## Python utility
+## Python utilities
 
-The Excel skill includes `scripts/csv_profile.py`, a standard-library-only script that profiles a CSV file.
+### 1. Excel / CSV Data Profiler
+Auto-detects delimiters (`,`, `;`, `\t`, `|`), infers data types, calculates numeric statistics (`min`, `max`, `mean`, `median`, `sum`), computes date spans, and counts duplicate rows:
 
 ```bash
 python skills/excel-data-analyzer/scripts/csv_profile.py path/to/data.csv --output profile.json
 ```
 
-Run the smoke test:
+### 2. Resume & Job Description Matcher
+Extracts requirements from a Job Description, scans candidate resumes for verified evidence quotes, highlights skills gaps, and screens for adversarial prompt injection attempts:
+
+```bash
+python skills/jd-resume-review/scripts/resume_matcher.py path/to/jd.txt path/to/candidate_resume.txt --output match_report.json
+```
+
+## Running tests
+
+Run the built-in test suite:
 
 ```bash
 python -m unittest discover -s tests -v
@@ -44,10 +54,9 @@ python -m unittest discover -s tests -v
 ## Safety and design notes
 
 - Skills provide instructions; they do not grant Claude additional tools or permissions by themselves.
-- Python scripts run in your local environment and should be reviewed before use.
-- Treat imported repositories and files as untrusted input. Do not run unknown scripts blindly.
-- Resume review must use job-related evidence only. Do not infer or score protected/sensitive traits. A person must make the final decision.
-- The included skills are starter templates. Adapt them to your workflow and validate outputs before relying on them.
+- Python utilities use only the Python standard library for maximum transparency and zero dependency bloat.
+- Treat imported repositories and candidate resumes as untrusted input. The resume matcher explicitly screens for adversarial prompt injections.
+- Resume review must use job-related evidence only. Do not infer or score protected/sensitive traits. A person must make the final hiring decision.
 
 ## Contributing a skill
 
